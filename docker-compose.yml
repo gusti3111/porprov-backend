@@ -1,0 +1,13 @@
+services:
+  porprov:
+    build: ./backend
+    image: "go_chi_porprov"
+    # image: "gusti3111/porprov-backend"
+    container_name: "porprov-backend-1"
+    ports:
+      - "8085:8080"
+    environment:
+      PORT: 8080
+      APP_ENV: production
+      DATABASE_URL: "postgresql://root:jawara%40kominfo123**@199.0.0.210:5432/porprov?sslmode=disable"
+    restart: unless-stopped
