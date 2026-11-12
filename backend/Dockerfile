@@ -10,8 +10,7 @@ RUN go mod download
 
 COPY . .
 
-# RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /app/bin/api ./cmd/api
-RUN CGO_ENABLED=0 go build -o /app/bin/api ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /app/bin/api ./cmd/api
 
 FROM alpine:3.21 AS runner
 
