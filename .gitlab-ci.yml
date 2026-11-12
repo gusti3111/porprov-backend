@@ -1,12 +1,19 @@
 stages:
   - build
 
-build:
+variables:
+  IMAGE_NAME: "porprov-backend"
+
+build_dockerhub:
   stage: build
-  image: docker:25.0.0-rc.2-cli
+  image: docker:27-cli
   services:
-    - docker:25.0.0-rc.2-dind
+    - docker:27-dind
+  only:
+    - master
+    - main
   script:
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - docker build -t $DOCKER_USERNAME/$IMAGE_NAME:latest .
-    - docker push $DOCKER_USERNAME/$IMAGE_NAME
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t $DOCKER_USERNAME/$IMAGE_NAME:latest -t $DOCKER_USERNAME/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f backend/Dockerfile ./backend
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA
